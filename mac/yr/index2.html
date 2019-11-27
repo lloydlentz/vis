@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Query Wrapper Example</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="querywrapper.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {'packages' : ['corechart']});
+    google.charts.setOnLoadCallback(function() { sendAndDraw('') });
+
+    var dataSourceUrl = 'https://spreadsheets.google.com/tq?key=rCaVQNfFDMhOM6ENNYeYZ9Q&pub=1';
+    dataSourceUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTjeXDSNz4FqGJhklhl6HtijOrBIXXPRuR3xPXyWx7-6lqz-7eYsnHukx6q8WuECLRMhu9e5OXYYX8f/pub?gid=1618332529&single=true&output=tsv';
+    var query;
+
+    function sendAndDraw(queryString) {
+      var container = document.getElementById('orgchart');
+      var orgChart = new google.visualization.LineChart(container);
+      query && query.abort();
+      query = new google.visualization.Query(dataSourceUrl + queryString);
+      var queryWrapper = new QueryWrapper(query, orgChart, {'size': 'large'}, container);
+      queryWrapper.sendAndDraw();
+    }
+
+  </script>
+</head>
+
+<body>
+<h1>Query Wrapper Example</h1>
+<form action="">
+  <span> This example uses the following spreadsheet: <br />
+    <a href="https://spreadsheets.google.com/pub?key=rCaVQNfFDMhOM6ENNYeYZ9Q">
+      https://spreadsheets.google.com/pub?key=rCaVQNfFDMhOM6ENNYeYZ9Q
+    </a></span>
+  <br /><br />
+  <select onChange="sendAndDraw(this.value)">
+    <option value="">No query string</option>
+    <option value="&tq=limit 3">query=limit 3</option>
+    <option value="&tq=select G,H">(Error) query=select G,H</option>
+  </select>
+</form>
+<br />
+<div id="orgchart"></div>
+</body>
+</html>
